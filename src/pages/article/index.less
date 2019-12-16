@@ -1,0 +1,28 @@
+.container {
+  display       : flex;
+  flex-direction: row;
+}
+
+.left {
+  width       : 200px;
+  padding     : 0px 10px;
+  background  : white;
+  margin-right: 1px;
+  overflow    : scroll;
+}
+
+.right {
+  flex: 1;
+}
+
+:global {
+  .antd-pro-pages-article-index-right {
+    .ant-card {
+      height: 100% !important;
+
+      .ant-card-body {
+        height: 100% !important;
+      }
+    }
+  }
+}
