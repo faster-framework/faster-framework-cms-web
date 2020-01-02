@@ -142,17 +142,13 @@ class CategoryEdit extends Component {
             </FixedRow>
             : ''
         }
-        {
-          this.props.form.getFieldValue("reqType") == 'url' ?
-            <FixedRow full>
-              <Form.Item label="跳转链接">
-                {
-                  getFieldDecorator("reqLocation", { rules: [{}] })(<Input />)
-                }
-              </Form.Item>
-            </FixedRow>
-            : ''
-        }
+        <FixedRow full>
+          <Form.Item label="跳转链接">
+            {
+              getFieldDecorator("reqLocation", { rules: [{}] })(<Input />)
+            }
+          </Form.Item>
+        </FixedRow>
       </Form >
     );
   }
