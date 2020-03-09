@@ -7,18 +7,18 @@ import Editor from '@/common/components/BraftEditor';
 import DictUtils from '@/common/utils/dict';
 import TreeUtils from '@/common/utils/treeUtils';
 
-class CategoryAdd extends Component {
+class SectionAdd extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      categoryTrees: []
+      sectionTrees: []
     }
 
   }
   componentDidMount() {
-    request.get('/category').then((response) => {
+    request.get('/section').then((response) => {
       this.setState({
-        categoryTrees: [{
+        sectionTrees: [{
           value: '0',
           title: '站点',
           children: TreeUtils.convertTreeSelectData(response)
@@ -39,9 +39,9 @@ class CategoryAdd extends Component {
       if (values.reqType == 'list') {
         values.templatePath = 'article/list.ftl';
       } else if (values.reqType == 'editor') {
-        values.templatePath = 'category/content.ftl';
+        values.templatePath = 'section/content.ftl';
       }
-      request.post('/category', { data: values }).then(res => {
+      request.post('/section', { data: values }).then(res => {
         //提交成功
         message.success('保存成功');
         modal.hideAndRefresh();
@@ -54,17 +54,17 @@ class CategoryAdd extends Component {
     return (
       <Form>
         <FixedRow full>
-          <Form.Item label="父级分类">
+          <Form.Item label="父级栏目">
             {
-              getFieldDecorator("parentId", { rules: [{ required: true, message: "请选择父级分类" }] })(<TreeSelect
+              getFieldDecorator("parentId", { rules: [{ required: true, message: "请选择父级栏目" }] })(<TreeSelect
                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                treeData={this.state.categoryTrees}
+                treeData={this.state.sectionTrees}
               />)
             }
           </Form.Item>
         </FixedRow>
         <FixedRow>
-          <Form.Item label="分类名称">
+          <Form.Item label="栏目名称">
             {
               getFieldDecorator("name", { rules: [{ required: true, message: "请填写名称" }] })(<Input />)
             }
@@ -81,7 +81,7 @@ class CategoryAdd extends Component {
               getFieldDecorator("position", { rules: [{ required: true, message: "请选择位置" }] })(
                 <Select placeholder="请选择">
                   {
-                    DictUtils.listByType("category:position").map(item => {
+                    DictUtils.listByType("section:position").map(item => {
                       return (
                         <Select.Option value={item.dictValue}>{item.name}</Select.Option>
                       )
@@ -96,7 +96,7 @@ class CategoryAdd extends Component {
               getFieldDecorator("reqType", { rules: [{ required: true, message: "请选择跳转类型" }] })(
                 <Select placeholder="请选择">
                   {
-                    DictUtils.listByType("category:reqType").map(item => {
+                    DictUtils.listByType("section:reqType").map(item => {
                       return (
                         <Select.Option value={item.dictValue}>{item.name}</Select.Option>
                       )
@@ -183,4 +183,4 @@ class CategoryAdd extends Component {
     );
   }
 }
-export default Form.create()(CategoryAdd);
+export default Form.create()(SectionAdd);

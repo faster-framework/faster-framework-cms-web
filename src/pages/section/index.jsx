@@ -7,11 +7,11 @@ import request from '@/common/utils/request'
 import Permission from '@/common/components/Permission';
 import DictUtils from '@/common/utils/dict';
 
-import CategoryAdd from './CategoryAdd';
-import CategoryEdit from './CategoryEdit';
-import CategorySort from './CategorySort';
+import SectionAdd from './SectionAdd';
+import SectionEdit from './SectionEdit';
+import SectionSort from './SectionSort';
 
-export default class CategoryList extends Component {
+export default class SectionList extends Component {
 
   constructor(props) {
     super(props);
@@ -28,16 +28,16 @@ export default class CategoryList extends Component {
   renderColAction = (text, record, index) => {
     return (
       <>
-        <Permission authority="category:add">
+        <Permission authority="section:add">
           <a onClick={() => this.refs.addModal.show(record)}>添加下级</a>
         </Permission>
-        <Permission authority="category:modify">
+        <Permission authority="section:modify">
           <a onClick={() => this.refs.editModal.show(record)}>修改</a>
         </Permission>
-        <Permission authority="category:modify">
+        <Permission authority="section:modify">
           <a onClick={() => this.refs.sortModal.show(record)}>设置顺序</a>
         </Permission>
-        <Permission authority="category:delete">
+        <Permission authority="section:delete">
           <a onClick={() => this.delete(record)}>删除</a>
         </Permission>
       </>
@@ -50,10 +50,10 @@ export default class CategoryList extends Component {
     return text == 1 ? '显示' : '隐藏';
   }
   renderPosition = (text, record, index) => {
-    return DictUtils.name('category:position', text);
+    return DictUtils.name('section:position', text);
   }
   renderReqType = (text, record, index) => {
-    return DictUtils.name('category:reqType', text);
+    return DictUtils.name('section:reqType', text);
   }
   /**
    * 删除
@@ -73,7 +73,7 @@ export default class CategoryList extends Component {
       content: '删除操作不可恢复，确认删除？',
       onOk() {
         return new Promise((resolve, reject) => {
-          request.delete("/category/delete", { data: selectRecrods.map(item => item.id) }).then(res => {
+          request.delete("/section/delete", { data: selectRecrods.map(item => item.id) }).then(res => {
             resolve();
             tableList.reload();
           }).catch(() => reject());
@@ -86,15 +86,15 @@ export default class CategoryList extends Component {
       <GridContent>
         <TableList ref='tableList'>
           <Action>
-            <Permission authority="category:add">
+            <Permission authority="section:add">
               <Button type="primary" icon="plus" onClick={() => this.refs.addModal.show()}>添加</Button>
             </Permission>
-            <Permission authority="category:delete">
+            <Permission authority="section:delete">
               <Button type="primary" icon="delete" onClick={() => this.delete()}>删除</Button>
             </Permission>
           </Action>
-          <Table url='/category/tree' pagination={false} defaultParam={this.defaultParam}>
-            <Table.Column title="分类名称" dataIndex="name" />
+          <Table url='/section/tree' pagination={false} defaultParam={this.defaultParam}>
+            <Table.Column title="栏目名称" dataIndex="name" />
             <Table.Column title="编码" dataIndex="code" />
             <Table.Column title="位置" dataIndex="position" render={this.renderPosition} />
             <Table.Column title="跳转类型" dataIndex="reqType" render={this.renderReqType} />
@@ -104,14 +104,14 @@ export default class CategoryList extends Component {
             <Table.Action render={this.renderColAction}></Table.Action>
           </Table>
         </TableList >
-        <ModalInfo title='添加分类' ref="addModal" {...this.refs}>
-          <CategoryAdd />
+        <ModalInfo title='添加栏目' ref="addModal" {...this.refs}>
+          <SectionAdd />
         </ModalInfo>
-        <ModalInfo title='编辑分类' ref="editModal" {...this.refs}>
-          <CategoryEdit />
+        <ModalInfo title='编辑栏目' ref="editModal" {...this.refs}>
+          <SectionEdit />
         </ModalInfo>
         <ModalInfo title='设置顺序' ref="sortModal" {...this.refs}>
-          <CategorySort />
+          <SectionSort />
         </ModalInfo>
       </GridContent >
     );

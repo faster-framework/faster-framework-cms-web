@@ -6,10 +6,10 @@ import UploadImg from '@/common/components/UploadImg';
 import Editor from '@/common/components/BraftEditor';
 import DictUtils from '@/common/utils/dict';
 
-class CategoryEdit extends Component {
+class SectionEdit extends Component {
   constructor(props) {
     super(props)
-    request.get('/category/' + this.props.currentRecord.id).then(res => {
+    request.get('/section/' + this.props.currentRecord.id).then(res => {
       this.props.form.setFieldsValue(res);
     });
   }
@@ -22,9 +22,9 @@ class CategoryEdit extends Component {
       if (values.reqType == 'list') {
         values.templatePath = 'article/list.ftl';
       } else if (values.reqType == 'editor') {
-        values.templatePath = 'category/content.ftl';
+        values.templatePath = 'section/content.ftl';
       }
-      request.put('/category/' + this.props.currentRecord.id, { data: values }).then(res => {
+      request.put('/section/' + this.props.currentRecord.id, { data: values }).then(res => {
         //提交成功
         message.success('保存成功');
         modal.hideAndRefresh();
@@ -37,7 +37,7 @@ class CategoryEdit extends Component {
     return (
       <Form>
         <FixedRow>
-          <Form.Item label="分类名称">
+          <Form.Item label="栏目名称">
             {
               getFieldDecorator("name", { rules: [{ required: true, message: "请填写名称" }] })(<Input />)
             }
@@ -55,7 +55,7 @@ class CategoryEdit extends Component {
               getFieldDecorator("position", { rules: [{ required: true, message: "请选择位置" }] })(
                 <Select placeholder="请选择">
                   {
-                    DictUtils.listByType("category:position").map(item => {
+                    DictUtils.listByType("section:position").map(item => {
                       return (
                         <Select.Option value={item.dictValue}>{item.name}</Select.Option>
                       )
@@ -70,7 +70,7 @@ class CategoryEdit extends Component {
               getFieldDecorator("reqType", { rules: [{ required: true, message: "请选择跳转类型" }] })(
                 <Select placeholder="请选择">
                   {
-                    DictUtils.listByType("category:reqType").map(item => {
+                    DictUtils.listByType("section:reqType").map(item => {
                       return (
                         <Select.Option value={item.dictValue}>{item.name}</Select.Option>
                       )
@@ -153,4 +153,4 @@ class CategoryEdit extends Component {
     );
   }
 }
-export default Form.create()(CategoryEdit);
+export default Form.create()(SectionEdit);

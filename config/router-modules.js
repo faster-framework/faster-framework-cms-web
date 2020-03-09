@@ -5,11 +5,11 @@ const routes = [
     icon: 'cluster',
     routes: [
       {
-        path: '/category',
-        name: '分类管理',
+        path: '/section',
+        name: '栏目管理',
         icon: 'book',
-        authority: 'category:manage',
-        component: './category',
+        authority: 'section:manage',
+        component: './section',
       },
       {
         path: '/article',

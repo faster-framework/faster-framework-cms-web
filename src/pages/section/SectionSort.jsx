@@ -3,10 +3,10 @@ import { Input, Form, message, Select, Radio,InputNumber } from 'antd';
 import FixedRow from '@/common/components/FixedRow';
 import request from '@/common/utils/request';
 
-class CategorySort extends Component {
+class SectionSort extends Component {
   constructor(props) {
     super(props)
-    request.get('/category/' + this.props.currentRecord.id).then(res => {
+    request.get('/section/' + this.props.currentRecord.id).then(res => {
       this.props.form.setFieldsValue(res);
     });
   }
@@ -16,7 +16,7 @@ class CategorySort extends Component {
       if (!!err) {
         return;
       };
-      request.put('/category/' + this.props.currentRecord.id, { data: values }).then(res => {
+      request.put('/section/' + this.props.currentRecord.id, { data: values }).then(res => {
         //提交成功
         message.success('保存成功');
         modal.hideAndRefresh();
@@ -39,4 +39,4 @@ class CategorySort extends Component {
     );
   }
 }
-export default Form.create()(CategorySort);
+export default Form.create()(SectionSort);

@@ -87,7 +87,7 @@ export default class ArticleList extends Component {
           </Search>
           <Action>
             {
-              (this.props.defaultParam && this.props.defaultParam.categoryId && this.props.defaultParam.categoryId!= '') ?
+              (this.props.defaultParam && this.props.defaultParam.sectionId && this.props.defaultParam.sectionId!= '') ?
                 <Permission authority="article:add">
                   <Button type="primary" icon="plus" onClick={() => this.refs.addModal.show()}>添加</Button>
                 </Permission>
@@ -106,7 +106,7 @@ export default class ArticleList extends Component {
           </Table>
         </TableList >
         <ModalInfo title='添加文章' ref="addModal" {...this.refs}>
-          <ArticleAdd  categoryId={this.props.defaultParam.categoryId}/>
+          <ArticleAdd  sectionId={this.props.defaultParam.sectionId}/>
         </ModalInfo>
         <ModalInfo title='编辑文章' ref="editModal" {...this.refs}>
           <ArticleEdit />

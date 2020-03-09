@@ -14,13 +14,13 @@ export default class ArticleIndex extends Component {
     super(props);
     this.state = {
       tableQuery: {},
-      categoryTrees: []
+      sectionTrees: []
     }
   }
   componentDidMount() {
-    request.get('/category').then((response) => {
+    request.get('/section').then((response) => {
       this.setState({
-        categoryTrees: [{
+        sectionTrees: [{
           value: '0',
           title: '站点',
           children: TreeUtils.convertTreeSelectData(response)
@@ -31,7 +31,7 @@ export default class ArticleIndex extends Component {
   onSelect = (keys, event) => {
     this.setState({
       tableQuery: {
-        categoryId: keys[0] == '0-0' ? '' : keys[0]
+        sectionId: keys[0] == '0-0' ? '' : keys[0]
       }
     });
     const self = this;
@@ -44,7 +44,7 @@ export default class ArticleIndex extends Component {
     return (
       <GridContent className={styles.container}>
         <div className={styles.left}>
-          <DirectoryTree expandAction={false} key={`tree-${this.state.categoryTrees && this.state.categoryTrees.length}`} defaultExpandAll onSelect={this.onSelect} treeData={this.state.categoryTrees} />
+          <DirectoryTree expandAction={false} key={`tree-${this.state.sectionTrees && this.state.sectionTrees.length}`} defaultExpandAll onSelect={this.onSelect} treeData={this.state.sectionTrees} />
         </div>
         <div className={styles.right}>
           <ArticleList defaultParam={this.state.tableQuery} ref="articleList"/>

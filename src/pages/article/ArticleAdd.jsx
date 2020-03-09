@@ -15,7 +15,7 @@ class ArticleAdd extends Component {
       if (!!err) {
         return;
       };
-      values.categoryId = this.props.categoryId;
+      values.sectionId = this.props.sectionId;
       values.publishStatus = 0;
       request.post('/article', { data: values }).then(res => {
         //提交成功
