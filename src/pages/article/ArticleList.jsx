@@ -79,6 +79,7 @@ export default class ArticleList extends Component {
         <TableList ref='tableList'>
           <Search>
             <Input label='标题' name='title' />
+            <Input label='编码' name='code' />
             <Select label='发布状态' name='publishStatus' placeholder="请选择">
               <Select.Option value=''>全部</Select.Option>
               <Select.Option value='0'>未发布</Select.Option>
@@ -99,6 +100,7 @@ export default class ArticleList extends Component {
           </Action>
           <Table url='/article' defaultParam={this.props.defaultParam}>
             <Table.Column title="标题" dataIndex="title" />
+            <Table.Column title="编码" dataIndex="code" />
             <Table.Column title="发布状态" dataIndex="publishStatus" render={this.renderPublishStatus} />
             <Table.Column title="发布时间" dataIndex="publishDate" />
             <Table.Column title="序号" dataIndex="sort" />
