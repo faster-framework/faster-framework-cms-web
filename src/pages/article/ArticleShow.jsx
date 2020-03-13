@@ -3,7 +3,7 @@ import { Input, Form, message, Radio } from 'antd';
 import FixedRow from '@/common/components/FixedRow';
 import request from '@/common/utils/request';
 
-class ArticlePublish extends Component {
+class ArticleShow extends Component {
   constructor(props) {
     super(props)
     request.get('/article/' + this.props.currentRecord.id).then(res => {
@@ -29,9 +29,9 @@ class ArticlePublish extends Component {
     return (
       <Form>
         <FixedRow>
-          <Form.Item label="是否发布">
+          <Form.Item label="是否展示">
             {
-              getFieldDecorator("publishStatus", { rules: [{ required: true, message: "请选择发布状态" }] })
+              getFieldDecorator("showStatus", { rules: [{ required: true, message: "请选择展示状态" }] })
                 (
                   <Radio.Group>
                     <Radio value={0}>否</Radio>
@@ -45,4 +45,4 @@ class ArticlePublish extends Component {
     );
   }
 }
-export default Form.create()(ArticlePublish);
+export default Form.create()(ArticleShow);

@@ -9,6 +9,8 @@ import ArticleAdd from './ArticleAdd';
 import ArticleEdit from './ArticleEdit';
 import ArticleSort from './ArticleSort';
 import ArticlePublish from './ArticlePublish';
+import ArticleShow from './ArticleShow';
+import ArticleTop from './ArticleTop';
 
 export default class ArticleList extends Component {
 
@@ -34,7 +36,13 @@ export default class ArticleList extends Component {
           <a onClick={() => this.refs.publishModal.show(record)}>发布</a>
         </Permission>
         <Permission authority="article:modify">
-          <a onClick={() => this.refs.sortModal.show(record)}>设置顺序</a>
+          <a onClick={() => this.refs.showModal.show(record)}>展示</a>
+        </Permission>
+        <Permission authority="article:modify">
+          <a onClick={() => this.refs.topModal.show(record)}>置顶</a>
+        </Permission>
+        <Permission authority="article:modify">
+          <a onClick={() => this.refs.sortModal.show(record)}>顺序</a>
         </Permission>
         <Permission authority="article:delete">
           <a onClick={() => this.delete(record)}>删除</a>
@@ -43,8 +51,8 @@ export default class ArticleList extends Component {
     );
   }
 
-  renderPublishStatus = (text, record, index) => {
-    return text == 1 ? '已发布' : '未发布';
+  renderStatus = (text, record, index) => {
+    return text == 1 ? '是' : '否';
   }
 
   /**
@@ -83,7 +91,17 @@ export default class ArticleList extends Component {
             <Select label='发布状态' name='publishStatus' placeholder="请选择">
               <Select.Option value=''>全部</Select.Option>
               <Select.Option value='0'>未发布</Select.Option>
-              <Select.Option value='1'>发布</Select.Option>
+              <Select.Option value='1'>已发布</Select.Option>
+            </Select>
+            <Select label='展示状态' name='showStatus' placeholder="请选择">
+              <Select.Option value=''>全部</Select.Option>
+              <Select.Option value='0'>隐藏</Select.Option>
+              <Select.Option value='1'>展示</Select.Option>
+            </Select>
+            <Select label='置顶状态' name='topStatus' placeholder="请选择">
+              <Select.Option value=''>全部</Select.Option>
+              <Select.Option value='0'>未置顶</Select.Option>
+              <Select.Option value='1'>置顶</Select.Option>
             </Select>
           </Search>
           <Action>
@@ -99,11 +117,12 @@ export default class ArticleList extends Component {
             </Permission>
           </Action>
           <Table url='/article' defaultParam={this.props.defaultParam}>
-            <Table.Column title="标题" dataIndex="title" />
-            <Table.Column title="编码" dataIndex="code" />
-            <Table.Column title="发布状态" dataIndex="publishStatus" render={this.renderPublishStatus} />
-            <Table.Column title="发布时间" dataIndex="publishDate" />
-            <Table.Column title="序号" dataIndex="sort" />
+            <Table.Column width={250} ellipsis title="标题" dataIndex="title" />
+            <Table.Column width={80}  title="发布" dataIndex="publishStatus" render={this.renderStatus} />
+            <Table.Column width={100} title="展示" dataIndex="showStatus" render={this.renderStatus} />
+            <Table.Column width={80} title="置顶" dataIndex="topStatus" render={this.renderStatus} />
+            <Table.Column width={200} title="发布时间" dataIndex="publishDate" />
+            <Table.Column width={80} title="序号" dataIndex="sort" />
             <Table.Action render={this.renderColAction}></Table.Action>
           </Table>
         </TableList >
@@ -116,7 +135,13 @@ export default class ArticleList extends Component {
         <ModalInfo title='发布' ref="publishModal" {...this.refs}>
           <ArticlePublish />
         </ModalInfo>
-        <ModalInfo title='设置顺序' ref="sortModal" {...this.refs}>
+        <ModalInfo title='展示' ref="showModal" {...this.refs}>
+          <ArticleShow />
+        </ModalInfo>
+        <ModalInfo title='置顶' ref="topModal" {...this.refs}>
+          <ArticleTop />
+        </ModalInfo>
+        <ModalInfo title='顺序' ref="sortModal" {...this.refs}>
           <ArticleSort />
         </ModalInfo>
       </>

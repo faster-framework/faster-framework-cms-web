@@ -43,17 +43,11 @@ export default class SectionList extends Component {
       </>
     );
   }
-  renderPublishStatus = (text, record, index) => {
-    return text == 1 ? '已发布' : '未发布';
+  renderStatus = (text, record, index) => {
+    return text == 1 ? '是' : '否';
   }
-  renderShowStatus = (text, record, index) => {
-    return text == 1 ? '显示' : '隐藏';
-  }
-  renderPosition = (text, record, index) => {
-    return DictUtils.name('section:position', text);
-  }
-  renderReqType = (text, record, index) => {
-    return DictUtils.name('section:reqType', text);
+  renderTemplateType = (text, record, index) => {
+    return text == 1 ? '普通' : '分页';
   }
   /**
    * 删除
@@ -96,10 +90,9 @@ export default class SectionList extends Component {
           <Table url='/section/tree' pagination={false} defaultParam={this.defaultParam}>
             <Table.Column title="栏目名称" dataIndex="name" />
             <Table.Column title="编码" dataIndex="code" />
-            <Table.Column title="位置" dataIndex="position" render={this.renderPosition} />
-            <Table.Column title="跳转类型" dataIndex="reqType" render={this.renderReqType} />
-            <Table.Column title="发布状态" dataIndex="publishStatus" render={this.renderPublishStatus} />
-            <Table.Column title="页面展示状态" dataIndex="showStatus" render={this.renderShowStatus} />
+            <Table.Column title="模板类型" dataIndex="templateType" render={this.renderTemplateType} />
+            <Table.Column title="是否发布" dataIndex="publishStatus" render={this.renderStatus} />
+            <Table.Column title="是否展示" dataIndex="showStatus" render={this.renderStatus} />
             <Table.Column title="序号" dataIndex="sort" />
             <Table.Action render={this.renderColAction}></Table.Action>
           </Table>

@@ -3,8 +3,8 @@ import { Input, Form, message, Select, Radio, InputNumber } from 'antd';
 import FixedRow from '@/common/components/FixedRow';
 import request from '@/common/utils/request';
 import UploadImg from '@/common/components/UploadImg';
+import Upload from '@/common/components/Upload';
 import Editor from '@/common/components/BraftEditor';
-import DictUtils from '@/common/utils/dict';
 
 class SectionEdit extends Component {
   constructor(props) {
@@ -19,11 +19,6 @@ class SectionEdit extends Component {
       if (!!err) {
         return;
       };
-      if (values.reqType == 'list') {
-        values.templatePath = 'article/list.ftl';
-      } else if (values.reqType == 'editor') {
-        values.templatePath = 'section/content.ftl';
-      }
       request.put('/section/' + this.props.currentRecord.id, { data: values }).then(res => {
         //提交成功
         message.success('保存成功');
@@ -36,6 +31,20 @@ class SectionEdit extends Component {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form>
+        <FixedRow upload>
+          <Form.Item label="图片">
+            {
+              getFieldDecorator("img")(<UploadImg />)
+            }
+          </Form.Item>
+        </FixedRow>
+        <FixedRow upload>
+          <Form.Item label="资源文件">
+            {
+              getFieldDecorator("resourceUrl", {})(<Upload />)
+            }
+          </Form.Item>
+        </FixedRow>
         <FixedRow>
           <Form.Item label="栏目名称">
             {
@@ -47,105 +56,84 @@ class SectionEdit extends Component {
               getFieldDecorator("code", { rules: [{ required: true, message: "请填写编码" }] })(<Input />)
             }
           </Form.Item>
+          <Form.Item label="顺序">
+            {
+              getFieldDecorator("sort")(<InputNumber />)
+            }
+          </Form.Item>
         </FixedRow>
 
         <FixedRow>
-          <Form.Item label="位置">
+          <Form.Item label="模板类型">
             {
-              getFieldDecorator("position", { rules: [{ required: true, message: "请选择位置" }] })(
+              getFieldDecorator("templateType")(
                 <Select placeholder="请选择">
-                  {
-                    DictUtils.listByType("section:position").map(item => {
-                      return (
-                        <Select.Option value={item.dictValue}>{item.name}</Select.Option>
-                      )
-                    })
-                  }
+                  <Select.Option value={1}>普通</Select.Option>
+                  <Select.Option value={2}>分页</Select.Option>
                 </Select>
               )
             }
           </Form.Item>
-          <Form.Item label="跳转类型">
+          <Form.Item label="模板地址">
             {
-              getFieldDecorator("reqType", { rules: [{ required: true, message: "请选择跳转类型" }] })(
-                <Select placeholder="请选择">
-                  {
-                    DictUtils.listByType("section:reqType").map(item => {
-                      return (
-                        <Select.Option value={item.dictValue}>{item.name}</Select.Option>
-                      )
-                    })
-                  }
-                </Select>
-              )
+              getFieldDecorator("templatePath")(<Input />)
+            }
+          </Form.Item>
+          <Form.Item label="跳转链接">
+            {
+              getFieldDecorator("link")(<Input />)
+            }
+          </Form.Item>
+          <Form.Item label="文章模板地址">
+            {
+              getFieldDecorator("contentTemplatePath")(<Input />)
             }
           </Form.Item>
         </FixedRow>
         <FixedRow>
-          <Form.Item label="发布状态">
+          <Form.Item label="是否发布">
             {
               getFieldDecorator("publishStatus", { rules: [{ required: true, message: "请设置发布状态" }] })(
                 <Radio.Group>
-                  <Radio value={0}>未发布</Radio>
-                  <Radio value={1}>发布</Radio>
+                  <Radio value={0}>否</Radio>
+                  <Radio value={1}>是</Radio>
                 </Radio.Group>
               )
             }
           </Form.Item>
-          <Form.Item label="页面展示状态">
+          <Form.Item label="是否展示">
             {
               getFieldDecorator("showStatus", { rules: [{ required: true, message: "请设置展示状态" }] })(
                 <Radio.Group>
-                  <Radio value={0}>隐藏</Radio>
-                  <Radio value={1}>显示</Radio>
+                  <Radio value={0}>否</Radio>
+                  <Radio value={1}>是</Radio>
+                </Radio.Group>
+              )
+            }
+          </Form.Item>
+          <Form.Item label="是否置顶">
+            {
+              getFieldDecorator("topStatus", { rules: [{ required: true, message: "请设置置顶状态" }] })(
+                <Radio.Group>
+                  <Radio value={0}>否</Radio>
+                  <Radio value={1}>是</Radio>
                 </Radio.Group>
               )
             }
           </Form.Item>
         </FixedRow>
-        <FixedRow upload>
-          <Form.Item label="封面图片">
-            {
-              getFieldDecorator("img", {})(<UploadImg />)
-            }
-          </Form.Item>
-        </FixedRow>
+
         <FixedRow full>
           <Form.Item label="描述">
             {
-              getFieldDecorator("description", {})(<Input.TextArea rows={4} placeholder="可选参数" />)
+              getFieldDecorator("description")(<Input.TextArea rows={4} />)
             }
           </Form.Item>
         </FixedRow>
-        <FixedRow>
-          <Form.Item label="顺序">
+        <FixedRow editor>
+          <Form.Item label="富文本内容">
             {
-              getFieldDecorator("sort", {})(<InputNumber />)
-            }
-          </Form.Item>
-        </FixedRow>
-        <FixedRow full>
-          <Form.Item label="内容模板地址">
-            {
-              getFieldDecorator("contentTemplatePath", {})(<Input placeholder="可选参数" />)
-            }
-          </Form.Item>
-        </FixedRow>
-        {
-          this.props.form.getFieldValue("reqType") == 'template' ?
-            <FixedRow full>
-              <Form.Item label="模板地址">
-                {
-                  getFieldDecorator("templatePath", {})(<Input />)
-                }
-              </Form.Item>
-            </FixedRow>
-            : ''
-        }
-        <FixedRow full>
-          <Form.Item label="跳转链接">
-            {
-              getFieldDecorator("reqLocation", { rules: [{}] })(<Input />)
+              getFieldDecorator("content")(<Editor />)
             }
           </Form.Item>
         </FixedRow>

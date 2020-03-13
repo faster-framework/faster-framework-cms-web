@@ -3,6 +3,7 @@ import { Input, Form, message, Radio, InputNumber } from 'antd';
 import FixedRow from '@/common/components/FixedRow';
 import request from '@/common/utils/request';
 import UploadImg from '@/common/components/UploadImg';
+import Upload from '@/common/components/Upload';
 import Editor from '@/common/components/BraftEditor';
 
 class ArticleEdit extends Component {
@@ -33,7 +34,14 @@ class ArticleEdit extends Component {
         <FixedRow>
           <Form.Item label="封面图片">
             {
-              getFieldDecorator("img", {})(<UploadImg />)
+              getFieldDecorator("img")(<UploadImg />)
+            }
+          </Form.Item>
+        </FixedRow>
+        <FixedRow upload>
+          <Form.Item label="资源文件">
+            {
+              getFieldDecorator("resourceUrl", {})(<Upload />)
             }
           </Form.Item>
         </FixedRow>
@@ -47,20 +55,40 @@ class ArticleEdit extends Component {
         <FixedRow>
           <Form.Item label="编码">
             {
-              getFieldDecorator("code", {})(<InputNumber />)
+              getFieldDecorator("code")(<Input />)
             }
           </Form.Item>
           <Form.Item label="顺序">
             {
-              getFieldDecorator("sort", {})(<InputNumber />)
+              getFieldDecorator("sort")(<InputNumber />)
             }
           </Form.Item>
-          <Form.Item label="发布状态">
+          <Form.Item label="是否发布">
             {
               getFieldDecorator("publishStatus", { rules: [{ required: true, message: "请设置发布状态" }] })(
                 <Radio.Group>
-                  <Radio value={0}>未发布</Radio>
-                  <Radio value={1}>发布</Radio>
+                  <Radio value={0}>否</Radio>
+                  <Radio value={1}>是</Radio>
+                </Radio.Group>
+              )
+            }
+          </Form.Item>
+          <Form.Item label="是否展示">
+            {
+              getFieldDecorator("showStatus", { rules: [{ required: true, message: "请设置展示状态" }] })(
+                <Radio.Group>
+                  <Radio value={0}>否</Radio>
+                  <Radio value={1}>是</Radio>
+                </Radio.Group>
+              )
+            }
+          </Form.Item>
+          <Form.Item label="是否置顶">
+            {
+              getFieldDecorator("topStatus", { rules: [{ required: true, message: "请设置置顶状态" }] })(
+                <Radio.Group>
+                  <Radio value={0}>否</Radio>
+                  <Radio value={1}>是</Radio>
                 </Radio.Group>
               )
             }
@@ -69,14 +97,14 @@ class ArticleEdit extends Component {
         <FixedRow full>
           <Form.Item label="描述">
             {
-              getFieldDecorator("description", {})(<Input.TextArea rows={4} />)
+              getFieldDecorator("description")(<Input.TextArea rows={4} />)
             }
           </Form.Item>
         </FixedRow>
         <FixedRow editor>
           <Form.Item label="文章内容">
             {
-              getFieldDecorator("content", { rules: [{ required: true, message: "请填写文章内容" }] })(<Editor />)
+              getFieldDecorator("content", { rules: [{ message: "请填写文章内容" }] })(<Editor />)
             }
           </Form.Item>
         </FixedRow>

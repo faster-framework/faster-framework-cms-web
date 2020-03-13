@@ -59,7 +59,13 @@ class UploadFile extends Component {
         <Upload
           action={BASE_API + '/admin/upload'}
           fileList={this.state.fileList}
-          onChange={this.handleChange}>
+          onChange={this.handleChange}
+          data={(file)=>{
+            return {
+              fileName : file.name
+            }
+          }}
+          >
           {fileList.length >= this.maxFile ? null : uploadButton}
         </Upload>
       </div>
