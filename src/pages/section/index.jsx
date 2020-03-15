@@ -80,6 +80,9 @@ export default class SectionList extends Component {
       <GridContent>
         <TableList ref='tableList'>
           <Action>
+            <Permission authority="section:list">
+              <Button type="primary" icon="redo" onClick={() => this.refs.tableList.reload()}>刷新</Button>
+            </Permission>
             <Permission authority="section:add">
               <Button type="primary" icon="plus" onClick={() => this.refs.addModal.show()}>添加</Button>
             </Permission>

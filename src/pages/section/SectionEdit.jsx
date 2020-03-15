@@ -66,7 +66,7 @@ class SectionEdit extends Component {
         <FixedRow>
           <Form.Item label="模板类型">
             {
-              getFieldDecorator("templateType")(
+              getFieldDecorator("templateType", { rules: [{ required: true, message: "请选择模板类型" }] })(
                 <Select placeholder="请选择">
                   <Select.Option value={1}>普通</Select.Option>
                   <Select.Option value={2}>分页</Select.Option>
