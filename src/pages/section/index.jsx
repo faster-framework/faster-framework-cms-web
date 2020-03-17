@@ -10,6 +10,9 @@ import DictUtils from '@/common/utils/dict';
 import SectionAdd from './SectionAdd';
 import SectionEdit from './SectionEdit';
 import SectionSort from './SectionSort';
+import SectionPublish from './SectionPublish';
+import SectionShow from './SectionShow';
+import SectionTop from './SectionTop';
 
 export default class SectionList extends Component {
 
@@ -34,8 +37,17 @@ export default class SectionList extends Component {
         <Permission authority="section:modify">
           <a onClick={() => this.refs.editModal.show(record)}>修改</a>
         </Permission>
+        <Permission authority="article:modify">
+          <a onClick={() => this.refs.publishModal.show(record)}>发布</a>
+        </Permission>
+        <Permission authority="article:modify">
+          <a onClick={() => this.refs.showModal.show(record)}>展示</a>
+        </Permission>
+        <Permission authority="article:modify">
+          <a onClick={() => this.refs.topModal.show(record)}>置顶</a>
+        </Permission>
         <Permission authority="section:modify">
-          <a onClick={() => this.refs.sortModal.show(record)}>设置顺序</a>
+          <a onClick={() => this.refs.sortModal.show(record)}>顺序</a>
         </Permission>
         <Permission authority="section:delete">
           <a onClick={() => this.delete(record)}>删除</a>
@@ -92,12 +104,13 @@ export default class SectionList extends Component {
           </Action>
           <Table url='/section/tree' pagination={false} defaultParam={this.defaultParam}>
             <Table.Column title="栏目名称" dataIndex="name" />
-            <Table.Column title="编码" dataIndex="code" />
-            <Table.Column title="模板类型" dataIndex="templateType" render={this.renderTemplateType} />
-            <Table.Column title="是否发布" dataIndex="publishStatus" render={this.renderStatus} />
-            <Table.Column title="是否展示" dataIndex="showStatus" render={this.renderStatus} />
-            <Table.Column title="序号" dataIndex="sort" />
-            <Table.Action render={this.renderColAction}></Table.Action>
+            <Table.Column width={150} title="编码" dataIndex="code" />
+            <Table.Column width={100} title="模板类型" dataIndex="templateType" render={this.renderTemplateType} />
+            <Table.Column width={80} title="发布" dataIndex="publishStatus" render={this.renderStatus} />
+            <Table.Column width={80} title="展示" dataIndex="showStatus" render={this.renderStatus} />
+            <Table.Column width={80} title="置顶" dataIndex="topStatus" render={this.renderStatus} />
+            <Table.Column width={80} title="序号" dataIndex="sort" />
+            <Table.Action width={350}  render={this.renderColAction}></Table.Action>
           </Table>
         </TableList >
         <ModalInfo title='添加栏目' ref="addModal" {...this.refs}>
@@ -108,6 +121,15 @@ export default class SectionList extends Component {
         </ModalInfo>
         <ModalInfo title='设置顺序' ref="sortModal" {...this.refs}>
           <SectionSort />
+        </ModalInfo>
+        <ModalInfo title='发布' ref="publishModal" {...this.refs}>
+          <SectionPublish />
+        </ModalInfo>
+        <ModalInfo title='展示' ref="showModal" {...this.refs}>
+          <SectionShow />
+        </ModalInfo>
+        <ModalInfo title='置顶' ref="topModal" {...this.refs}>
+          <SectionTop />
         </ModalInfo>
       </GridContent >
     );

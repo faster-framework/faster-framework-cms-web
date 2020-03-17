@@ -119,7 +119,7 @@ export default class ArticleList extends Component {
           <Table url='/article' defaultParam={this.props.defaultParam}>
             <Table.Column width={250} ellipsis title="标题" dataIndex="title" />
             <Table.Column width={80}  title="发布" dataIndex="publishStatus" render={this.renderStatus} />
-            <Table.Column width={100} title="展示" dataIndex="showStatus" render={this.renderStatus} />
+            <Table.Column width={80} title="展示" dataIndex="showStatus" render={this.renderStatus} />
             <Table.Column width={80} title="置顶" dataIndex="topStatus" render={this.renderStatus} />
             <Table.Column width={200} title="发布时间" dataIndex="publishDate" />
             <Table.Column width={80} title="序号" dataIndex="sort" />
