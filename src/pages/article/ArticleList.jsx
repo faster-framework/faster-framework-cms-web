@@ -44,6 +44,9 @@ export default class ArticleList extends Component {
         <Permission authority="article:modify">
           <a onClick={() => this.refs.sortModal.show(record)}>顺序</a>
         </Permission>
+        <Permission authority="article:add">
+          <a onClick={() => this.clone(record)}>克隆</a>
+        </Permission>
         <Permission authority="article:delete">
           <a onClick={() => this.delete(record)}>删除</a>
         </Permission>
@@ -53,6 +56,34 @@ export default class ArticleList extends Component {
 
   renderStatus = (text, record, index) => {
     return text == 1 ? '是' : '否';
+  }
+
+   /**
+   * 克隆
+   */
+  clone = (record) => {
+    const tableList = this.refs.tableList;
+    const selectRecrods = tableList.currentSelectRows(record);
+    if (selectRecrods.length != 1) {
+      message.error('请选择一条记录！');
+      return;
+    }
+
+    Modal.confirm({
+      title: '克隆',
+      okText: "确认",
+      cancelText: "取消",
+      centered: true,
+      content: '仅可克隆不存在编码的文章，确认？',
+      onOk() {
+        return new Promise((resolve, reject) => {
+          request.post('/article', { data: selectRecrods[0] }).then(res => {
+            resolve();
+            tableList.reload();
+          }).catch(() => reject());
+        });
+      }
+    });
   }
 
   /**

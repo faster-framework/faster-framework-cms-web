@@ -17,7 +17,6 @@ class ArticleAdd extends Component {
         return;
       };
       values.sectionId = this.props.sectionId;
-      values.publishStatus = 0;
       request.post('/article', { data: values }).then(res => {
         //提交成功
         message.success('保存成功');

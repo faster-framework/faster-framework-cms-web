@@ -67,7 +67,7 @@ class UploadImg extends Component {
     return (
       <div>
         <Upload
-          action={BASE_API + '/admin/upload'}
+          action={BASE_API + '/upload'}
           listType="picture-card"
           fileList={this.state.fileList}
           onChange={this.handleChange}

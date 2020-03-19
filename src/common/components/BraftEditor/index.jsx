@@ -23,7 +23,7 @@ export default class BraftEditorPro extends Component {
   uploadFn = (param) => {
     const formData = new FormData();
     formData.append('file', param.file)
-    request.post('/admin/upload', { data: formData, headers: { 'Content-Type': 'multipart/form-data' } })
+    request.post('/upload', { data: formData, headers: { 'Content-Type': 'multipart/form-data' } })
       .then(response => {
         param.success({
           url: response.url

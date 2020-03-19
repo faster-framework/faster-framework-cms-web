@@ -28,7 +28,10 @@ class SectionAdd extends Component {
       if (this.props.currentRecord != undefined && this.props.currentRecord.id != undefined) {
         parentId = this.props.currentRecord.id;
       }
-      this.props.form.setFieldsValue({ "parentId": parentId });
+      const parent = response.find(item => {
+        return item.id == parentId;
+      });
+      this.props.form.setFieldsValue({ "parentId": parentId, "code": parent ? parent.code + "-" : "" });
     });
   }
   onOk(modal) {

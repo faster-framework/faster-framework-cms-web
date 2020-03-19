@@ -54,7 +54,7 @@ const errorHandler = function (err) {
 }
 
 const request = extend({
-  prefix: BASE_API + '/admin',
+  prefix: BASE_API,
   timeout: 5000,
   headers: { 'Content-Type': 'application/json; charset=utf-8' },
   credentials: 'include',

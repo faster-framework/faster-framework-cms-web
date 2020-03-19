@@ -19,12 +19,14 @@ export default class ArticleIndex extends Component {
   }
   componentDidMount() {
     request.get('/section').then((response) => {
+      const convertChildren = TreeUtils.convertTreeSelectData(response);
       this.setState({
         sectionTrees: [{
           value: '0',
           title: '站点',
-          children: TreeUtils.convertTreeSelectData(response)
-        }]
+          children: convertChildren
+        }],
+        defaultExpandedKeys: ['0-0']
       });
     });
   }
@@ -44,7 +46,7 @@ export default class ArticleIndex extends Component {
     return (
       <GridContent className={styles.container}>
         <div className={styles.left}>
-          <DirectoryTree expandAction={false} key={`tree-${this.state.sectionTrees && this.state.sectionTrees.length}`} defaultExpandAll onSelect={this.onSelect} treeData={this.state.sectionTrees} />
+          <DirectoryTree defaultExpandedKeys={this.state.defaultExpandedKeys} key={`tree-${this.state.sectionTrees && this.state.sectionTrees.length}`}  onSelect={this.onSelect} treeData={this.state.sectionTrees} />
         </div>
         <div className={styles.right}>
           <ArticleList defaultParam={this.state.tableQuery} ref="articleList"/>
