@@ -11,6 +11,7 @@ import ArticleSort from './ArticleSort';
 import ArticlePublish from './ArticlePublish';
 import ArticleShow from './ArticleShow';
 import ArticleTop from './ArticleTop';
+import DictUtils from '@/common/utils/dict';
 
 export default class ArticleList extends Component {
 
@@ -56,6 +57,11 @@ export default class ArticleList extends Component {
 
   renderStatus = (text, record, index) => {
     return text == 1 ? '是' : '否';
+  }
+  renderTitle = (text,record,index)=>{
+    const siteUrl = DictUtils.value('site-url','site-url');
+    const articleUrl = siteUrl + "a/"+record.id;
+  return <a href={articleUrl} target='_blank'>{text}</a>;
   }
 
    /**
@@ -148,7 +154,7 @@ export default class ArticleList extends Component {
             </Permission>
           </Action>
           <Table url='/article' defaultParam={this.props.defaultParam}>
-            <Table.Column width={250} ellipsis title="标题" dataIndex="title" />
+            <Table.Column width={250} ellipsis title="标题" dataIndex="title" render={this.renderTitle}/>
             <Table.Column width={80}  title="发布" dataIndex="publishStatus" render={this.renderStatus} />
             <Table.Column width={80} title="展示" dataIndex="showStatus" render={this.renderStatus} />
             <Table.Column width={80} title="置顶" dataIndex="topStatus" render={this.renderStatus} />

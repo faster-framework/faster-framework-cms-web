@@ -3,6 +3,7 @@ import { Input, Button, message, Modal } from 'antd';
 import { GridContent } from '@ant-design/pro-layout';
 import request from '@/common/utils/request'
 import styles from './index.less';
+import DictUtils from '@/common/utils/dict';
 
 
 export default class SiteIndex extends Component {
@@ -39,7 +40,7 @@ export default class SiteIndex extends Component {
       <GridContent>
         <div className={styles.container}>
           <Button size="large" className={styles.bt} onClick={this.generateStatic}>生成静态站点</Button>
-          <Button size="large"  className={styles.bt} href={BASE_API} target="_blank">站点预览</Button>
+          <Button size="large"  className={styles.bt} href={DictUtils.value('site-url','site-url')} target="_blank">站点预览</Button>
         </div>
       </GridContent>
     );

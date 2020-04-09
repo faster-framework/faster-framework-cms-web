@@ -103,7 +103,7 @@ export default class SectionList extends Component {
             </Permission>
           </Action>
           <Table url='/section/tree' pagination={false} defaultParam={this.defaultParam}>
-            <Table.Column title="栏目名称" dataIndex="name" />
+            <Table.Column width={250} ellipsis title="栏目名称" dataIndex="name" />
             <Table.Column width={150} title="编码" dataIndex="code" />
             <Table.Column width={100} title="模板类型" dataIndex="templateType" render={this.renderTemplateType} />
             <Table.Column width={80} title="发布" dataIndex="publishStatus" render={this.renderStatus} />

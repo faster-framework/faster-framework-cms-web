@@ -6,6 +6,7 @@ import UploadImg from '@/common/components/UploadImg';
 import Upload from '@/common/components/Upload';
 import Editor from '@/common/components/BraftEditor';
 import TreeUtils from '@/common/utils/treeUtils';
+import DictUtils from '@/common/utils/dict';
 
 class SectionAdd extends Component {
   constructor(props) {
@@ -101,9 +102,19 @@ class SectionAdd extends Component {
               )
             }
           </Form.Item>
-          <Form.Item label="模板地址">
+          <Form.Item label="栏目模板">
             {
-              getFieldDecorator("templatePath")(<Input />)
+              getFieldDecorator("templatePath")(
+                <Select placeholder="请选择">
+                  {
+                    DictUtils.listByType("section-template").map(item => {
+                      return (
+                        <Select.Option value={item.dictValue}>{item.name}</Select.Option>
+                      )
+                    })
+                  }
+                </Select>
+              )
             }
           </Form.Item>
           <Form.Item label="跳转链接">
@@ -111,9 +122,19 @@ class SectionAdd extends Component {
               getFieldDecorator("link")(<Input />)
             }
           </Form.Item>
-          <Form.Item label="文章模板地址">
+          <Form.Item label="文章模板">
             {
-              getFieldDecorator("contentTemplatePath")(<Input />)
+              getFieldDecorator("articleTemplatePath")(
+                <Select placeholder="请选择">
+                {
+                  DictUtils.listByType("article-template").map(item => {
+                    return (
+                      <Select.Option value={item.dictValue}>{item.name}</Select.Option>
+                    )
+                  })
+                }
+              </Select>
+              )
             }
           </Form.Item>
         </FixedRow>
