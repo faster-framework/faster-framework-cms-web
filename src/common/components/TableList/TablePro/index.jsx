@@ -20,6 +20,7 @@ export default class TablePro extends Component {
       showQuickJumper: true,
       pageSizeOptions: ['20', '50', '100', '200']
     },
+    defaultParam: this.props.defaultParam || {},
     lastFilter: {
 
     },
