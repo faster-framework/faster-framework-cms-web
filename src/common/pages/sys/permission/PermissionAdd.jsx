@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Input, Form, message, TreeSelect } from 'antd';
+import { Input, message, TreeSelect } from 'antd';
+import Form from '@/common/components/Form';
 import FixedRow from '@/common/components/FixedRow';
 import request from '@/common/utils/request';
 import treeUtils from '@/common/utils/treeUtils';

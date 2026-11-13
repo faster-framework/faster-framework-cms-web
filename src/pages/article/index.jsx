@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Tree } from 'antd';
-import { GridContent } from '@ant-design/pro-layout';
+import { GridContent } from '@ant-design/pro-components';
 import ArticleList from './ArticleList';
 import request from '@/common/utils/request';
 import TreeUtils from '@/common/utils/treeUtils';
@@ -22,23 +22,24 @@ export default class ArticleIndex extends Component {
       const convertChildren = TreeUtils.convertTreeSelectData(response);
       this.setState({
         sectionTrees: [{
+          key: '0',
           value: '0',
           title: '站点',
           children: convertChildren
         }],
-        defaultExpandedKeys: ['0-0']
+        defaultExpandedKeys: ['0']
       });
     });
   }
   onSelect = (keys, event) => {
     this.setState({
       tableQuery: {
-        sectionId: keys[0] == '0-0' ? '' : keys[0]
+        sectionId: keys[0] == '0' ? '' : keys[0]
       }
     });
     const self = this;
     setTimeout(() => {
-      self.refs.articleList.refs.tableList.reload();
+      self.articleList.reload();
     }, 0);
 
   };
@@ -49,7 +50,7 @@ export default class ArticleIndex extends Component {
           <DirectoryTree defaultExpandedKeys={this.state.defaultExpandedKeys} key={`tree-${this.state.sectionTrees && this.state.sectionTrees.length}`}  onSelect={this.onSelect} treeData={this.state.sectionTrees} />
         </div>
         <div className={styles.right}>
-          <ArticleList defaultParam={this.state.tableQuery} ref="articleList"/>
+          <ArticleList defaultParam={this.state.tableQuery} ref={node => { this.articleList = node; }}/>
         </div>
       </GridContent>
     );

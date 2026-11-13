@@ -38,7 +38,7 @@ class TableList extends Component {
       return newItem;
     });
     return (
-      <Card bordered={false} title={this.props.title}>
+      <Card variant="borderless" title={this.props.title}>
         {children}
       </Card>
     )

@@ -45,6 +45,7 @@ const routes = [
   },
   ...modules,
   {
+    path: '*',
     component: '../common/pages/404'
   }
 ]

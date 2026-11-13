@@ -1,6 +1,12 @@
 .container {
   display       : flex;
-  flex-direction: row;
+  flex-direction : row;
+
+  :global(.ant-pro-grid-content-children) {
+    display       : flex;
+    flex-direction : row;
+    width         : 100%;
+  }
 }
 
 .left {
@@ -9,15 +15,14 @@
   background  : white;
   margin-right: 1px;
   overflow    : scroll;
-  height: 100vh;
+  height      : 100vh;
 }
 
 .right {
-  flex: 1;
-}
+  flex    : 1;
+  min-width: 0;
 
-:global {
-  .antd-pro-pages-article-index-right {
+  :global {
     .ant-card {
       height: 100% !important;
 

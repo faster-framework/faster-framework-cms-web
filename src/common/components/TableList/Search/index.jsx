@@ -1,4 +1,6 @@
-import { Button, Col, Form, Row, Icon } from 'antd';
+import { Button, Col, Row } from 'antd';
+import { SearchOutlined, ReloadOutlined, UpOutlined, DownOutlined } from '@ant-design/icons';
+import Form from '@/common/components/Form';
 import React, { Component } from 'react';
 
 
@@ -80,14 +82,14 @@ class Search extends Component {
         </Row>
         <Row>
           <Col style={{ textAlign: "right" }}>
-            <Button icon="search" type="primary" onClick={this.handleSearch}>
+            <Button icon={<SearchOutlined />} type="primary" onClick={this.handleSearch}>
               查询
             </Button>
-            <Button icon="reload" style={{ marginLeft: 16 }} onClick={this.handleReset}>
+            <Button icon={<ReloadOutlined />} style={{ marginLeft: 16 }} onClick={this.handleReset}>
               重置
             </Button>
             <a style={{ marginLeft: 16, fontSize: 12, display: expandBtDisplay }} onClick={this.toggle}>
-              {this.state.expand ? '收起' : '展开'} <Icon type={this.state.expand ? 'up' : 'down'} />
+              {this.state.expand ? '收起' : '展开'} {this.state.expand ? <UpOutlined /> : <DownOutlined />}
             </a>
           </Col>
         </Row>

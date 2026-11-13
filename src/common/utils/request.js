@@ -4,7 +4,8 @@
  */
 import { extend } from 'umi-request';
 import { message } from 'antd';
-import router from 'umi/router';
+import { history } from '@umijs/max';
+import { dispatch } from './store';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -30,7 +31,7 @@ message.config({
 });
 const errorHandler = function (err) {
   const { response } = err;
-  window.g_app._store.dispatch({
+  dispatch({
     type: 'global/loadingHide'
   });
   if (response) {
@@ -40,7 +41,7 @@ const errorHandler = function (err) {
         throw err;
       }
       window.localStorage.removeItem("token");
-      router.push('/login');
+      history.push('/login');
       throw err;
     } else if (err.data) {
       message.error(err.data.message != 'No message available' ? err.data.message : codeMessage[response.status]);
@@ -61,17 +62,18 @@ const request = extend({
   errorHandler
 });
 request.interceptors.response.use((response) => {
-  window.g_app._store.dispatch({
+  dispatch({
     type: 'global/loadingHide'
   });
   return response;
 });
 request.interceptors.request.use((url, options) => {
-  window.g_app._store.dispatch({
+  dispatch({
     type: 'global/loadingShow'
   });
   const token = window.localStorage.token;
   options.headers = {
+    ...(options.headers || {}),
     'Auth-Token': token,
   };
   return (

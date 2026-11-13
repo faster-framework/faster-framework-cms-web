@@ -1,16 +1,40 @@
-import ProLayout, { DefaultFooter } from '@ant-design/pro-layout';
+import { DefaultFooter, ProLayout } from '@ant-design/pro-components';
+import {
+  AppstoreOutlined,
+  BookOutlined,
+  CloudOutlined,
+  DatabaseOutlined,
+  HomeOutlined,
+  LockOutlined,
+  ReadOutlined,
+  SettingOutlined,
+  TeamOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
+import routers from '../../../config/routers';
 import React, { Component } from 'react';
-import Link from 'umi/link';
-import { connect } from 'dva';
+import { Link, Outlet, connect } from '@umijs/max';
 import RenderAuthorize from '@/common/components/Authorized';
+import { getAuthority } from '@/common/utils/authority';
 import RightContent from '@/common/components/GlobalHeader/RightContent';
 import Tabs from '@/common/components/Tabs';
 import logo from '@/common/logo.png';
 
+const iconMap = {
+  home: HomeOutlined,
+  setting: SettingOutlined,
+  user: UserOutlined,
+  'usergroup-add': TeamOutlined,
+  lock: LockOutlined,
+  database: DatabaseOutlined,
+  cluster: AppstoreOutlined,
+  book: BookOutlined,
+  read: ReadOutlined,
+  cloud: CloudOutlined,
+};
+
 const footerRender = (_, defaultDom) => {
-  return (
-    <DefaultFooter links={[]} copyright={COPRY_RIGHT} />
-  );
+  return <DefaultFooter links={[]} copyright={COPRY_RIGHT} />;
 };
 
 class BasicLayout extends Component {
@@ -34,12 +58,19 @@ class BasicLayout extends Component {
   };
   handleMenu = menuList => {
     return menuList.map(item => {
-      const localItem = { ...item, children: item.children ? this.handleMenu(item.children) : [] };
-      let authorized = RenderAuthorize(this.props.currentUser.permissions);
+      const localItem = {
+        ...item,
+        icon:
+          typeof item.icon === 'string'
+            ? React.createElement(iconMap[item.icon] || AppstoreOutlined)
+            : item.icon,
+        children: item.children ? this.handleMenu(item.children) : [],
+      };
+      const authorized = RenderAuthorize(getAuthority(this.props.currentUser.permissions));
       return authorized.check(item.authority, localItem, null);
     });
   };
-  menuClick = (menuItemProps) => {
+  menuClick = menuItemProps => {
     const { dispatch } = this.props;
     if (dispatch) {
       dispatch({
@@ -47,9 +78,9 @@ class BasicLayout extends Component {
         menuItemProps,
       });
     }
-  }
+  };
   render() {
-    const { children, settings } = this.props;
+    const { settings } = this.props;
     return (
       <ProLayout
         logo={logo}
@@ -59,17 +90,21 @@ class BasicLayout extends Component {
           if (menuItemProps.isUrl || menuItemProps.children) {
             return defaultDom;
           }
-          return <Link onClick={() => this.menuClick(menuItemProps)} to={menuItemProps.path}>{defaultDom}</Link>;
+          return (
+            <Link onClick={() => this.menuClick(menuItemProps)} to={menuItemProps.path}>
+              {defaultDom}
+            </Link>
+          );
         }}
-
         breadcrumbRender={(routers = []) => {
           return [
-          {
-            path: '/',
-            breadcrumbName: '控制台',
-          },
-          ...routers,
-        ]}}
+            {
+              path: '/',
+              breadcrumbName: '控制台',
+            },
+            ...routers,
+          ];
+        }}
         itemRender={(route, params, routes, paths) => {
           const first = routes.indexOf(route) === 0;
           return first ? (
@@ -80,19 +115,21 @@ class BasicLayout extends Component {
         }}
         footerRender={footerRender}
         menuDataRender={this.handleMenu}
-        rightContentRender={rightProps => <RightContent {...rightProps} />}
+        rightContentRender={() => <RightContent />}
         {...this.props}
         {...settings}
+        route={{ routes: routers }}
       >
-        <Tabs>{children}</Tabs>
+        <Tabs>
+          <Outlet />
+        </Tabs>
       </ProLayout>
     );
   }
-
-};
+}
 
 export default connect(({ global, settings, user }) => ({
   collapsed: global.collapsed,
   settings,
-  currentUser: user.currentUser
+  currentUser: user.currentUser,
 }))(BasicLayout);

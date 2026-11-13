@@ -1,67 +1,71 @@
 import React, { Component } from 'react';
 import { Modal } from 'antd';
-import styles from './index.less'
+import styles from './index.less';
 
 class BaseModal extends Component {
   state = {
-    visible: false
-  }
+    visible: false,
+  };
   constructor(props) {
     super(props);
-
   }
 
   hide = () => {
     this.setState({
-      visible: false
-    })
+      visible: false,
+    });
   };
   hideAndRefresh = () => {
-    this.props.tableList.reload();
+    const { tableList } = this.props;
+    const table = typeof tableList === 'function' ? tableList() : tableList;
+    if (table && typeof table.reload === 'function') {
+      table.reload();
+    }
     this.hide();
-  }
+  };
 
-  show = (record) => {
+  show = record => {
     this.setState({
       visible: true,
-      currentRecord: record
+      currentRecord: record,
     });
-  }
+  };
   ok = () => {
     if (this.form) {
-      this.form.onOk(this)
-    }else{
-      this.refs.modalInfo.onOk(this);
+      this.form.onOk(this);
+    } else if (this.modalInfo) {
+      this.modalInfo.onOk(this);
     }
-  }
-  wrappedComponentRef = (form) => {
+  };
+  wrappedComponentRef = form => {
     this.form = form;
-  }
-  componentWillUnmount() {
-    this.setState = (state, callback) => {
-      return;
-    };
-  }
+  };
   render() {
     const { children, ...otherPorps } = this.props;
     return (
       <Modal
-        destroyOnClose
+        destroyOnHidden
         centered
         keyboard={false}
         maskClosable={false}
         onCancel={this.hide}
         onOk={this.ok}
         {...otherPorps}
-        visible={this.state.visible}
+        open={this.state.visible}
         className={this.props.width ? 'fit-modal' : 'fit-modal fit-modal-width'}
       >
-        <div className='fit-modal-content'>
+        <div className="fit-modal-content">
           {React.Children.map(children, (item, index) => {
-            return React.cloneElement(item, { wrappedComponentRef: this.wrappedComponentRef, currentRecord: this.state.currentRecord,ref:"modalInfo" })
+            return React.cloneElement(item, {
+              wrappedComponentRef: this.wrappedComponentRef,
+              currentRecord: this.state.currentRecord,
+              ref: node => {
+                this.modalInfo = node;
+              },
+            });
           })}
         </div>
-      </Modal >
+      </Modal>
     );
   }
 }

@@ -1,7 +1,6 @@
 import { Button, Result } from 'antd';
 import React from 'react';
-import router from 'umi/router'; // 这里应该使用 antd 的 404 result 组件，
-// 但是还没发布，先来个简单的。
+import { history } from '@umijs/max';
 
 const NoFoundPage = () => (
   <Result
@@ -9,7 +8,7 @@ const NoFoundPage = () => (
     title="404"
     subTitle="对不起，您请求的页面不存在"
     extra={
-      <Button type="primary" onClick={() => router.push('/')}>
+      <Button type="primary" onClick={() => history.push('/')}>
         回首页
       </Button>
     }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Input, Form, message, Select, Radio, InputNumber } from 'antd';
+import { Input, message, Select, Radio, InputNumber } from 'antd';
+import Form from '@/common/components/Form';
 import FixedRow from '@/common/components/FixedRow';
 import request from '@/common/utils/request';
 import UploadImg from '@/common/components/UploadImg';
@@ -67,25 +68,14 @@ class SectionEdit extends Component {
           <Form.Item label="模板类型">
             {
               getFieldDecorator("templateType", { rules: [{ required: true, message: "请选择模板类型" }] })(
-                <Select placeholder="请选择">
-                  <Select.Option value={1}>普通</Select.Option>
-                  <Select.Option value={2}>分页</Select.Option>
-                </Select>
+                <Select placeholder="请选择" options={[{ value: 1, label: '普通' }, { value: 2, label: '分页' }]} />
               )
             }
           </Form.Item>
           <Form.Item label="栏目模板">
             {
               getFieldDecorator("templatePath")(
-                <Select placeholder="请选择">
-                  {
-                    DictUtils.listByType("section-template").map(item => {
-                      return (
-                        <Select.Option value={item.dictValue}>{item.name}</Select.Option>
-                      )
-                    })
-                  }
-                </Select>
+                <Select placeholder="请选择" options={DictUtils.listByType('section-template').map(item => ({ value: item.dictValue, label: item.name }))} />
               )
             }
           </Form.Item>
@@ -97,15 +87,7 @@ class SectionEdit extends Component {
           <Form.Item label="文章模板">
             {
               getFieldDecorator("articleTemplatePath")(
-                <Select placeholder="请选择">
-                  {
-                    DictUtils.listByType("article-template").map(item => {
-                      return (
-                        <Select.Option value={item.dictValue}>{item.name}</Select.Option>
-                      )
-                    })
-                  }
-                </Select>
+                <Select placeholder="请选择" options={DictUtils.listByType('article-template').map(item => ({ value: item.dictValue, label: item.name }))} />
               )
             }
           </Form.Item>

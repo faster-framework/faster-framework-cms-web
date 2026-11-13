@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Icon, Upload, Modal } from 'antd';
+import { Upload, Modal } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import './index.less';
 
 class UploadImg extends Component {
@@ -60,7 +61,7 @@ class UploadImg extends Component {
     const { previewVisible, previewImage, fileList } = this.state;
     const uploadButton = (
       <div>
-        <Icon type="plus" />
+        <PlusOutlined />
         <div className="ant-upload-text">Upload</div>
       </div>
     );
@@ -68,6 +69,7 @@ class UploadImg extends Component {
       <div>
         <Upload
           action={BASE_API + '/upload'}
+          headers={{ 'Auth-Token': window.localStorage.token }}
           listType="picture-card"
           fileList={this.state.fileList}
           onChange={this.handleChange}
@@ -76,7 +78,7 @@ class UploadImg extends Component {
         >
           {fileList.length >= this.maxFile ? null : uploadButton}
         </Upload>
-        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+        <Modal open={previewVisible} footer={null} onCancel={this.handleCancel}>
           <img alt="预览" style={{ width: '100%' }} src={previewImage} />
         </Modal>
       </div>

@@ -1,8 +1,10 @@
-import { Checkbox, Form, Button, Input, Icon } from 'antd';
+import { Checkbox, Button, Input } from 'antd';
+import { UserOutlined, LockOutlined, PictureOutlined } from '@ant-design/icons';
+import Form from '@/common/components/Form';
 import React, { Component } from 'react';
 import styles from './style.less';
 import request from '@/common/utils/request'
-import router from 'umi/router';
+import { history } from '@umijs/max';
 
 const lastRemember = window.localStorage.remember;
 class LoginForm extends Component {
@@ -32,7 +34,7 @@ class LoginForm extends Component {
         window.localStorage.remember = false;
       }
       window.localStorage.token = res.token;
-      router.push('/');
+      history.push('/');
     });
   }
 
@@ -72,7 +74,7 @@ class LoginForm extends Component {
             })(
               <Input
                 size='large'
-                prefix={<Icon type="user" className={styles.prefixIcon} />}
+                prefix={<UserOutlined className={styles.prefixIcon} />}
                 placeholder="用户名"
                 onPressEnter={this.handleSubmit}
               />
@@ -86,7 +88,7 @@ class LoginForm extends Component {
               <Input
                 type="password"
                 size='large'
-                prefix={<Icon type="lock" className={styles.prefixIcon} />}
+                prefix={<LockOutlined className={styles.prefixIcon} />}
                 placeholder="密码"
                 onPressEnter={this.handleSubmit}
               />
@@ -98,7 +100,7 @@ class LoginForm extends Component {
             })(
               <Input
                 size='large'
-                prefix={<Icon type="picture" className={styles.prefixIcon} />}
+                prefix={<PictureOutlined className={styles.prefixIcon} />}
                 placeholder="验证码"
                 className={styles.captchaInput}
                 onPressEnter={this.handleSubmit}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Input, Button, message, Modal } from 'antd';
-import { GridContent } from '@ant-design/pro-layout';
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { GridContent } from '@ant-design/pro-components';
 import ModalInfo from '@/common/components/Modal';
 import TableList, { Search, Table, Action } from '@/common/components/TableList';
 import request from '@/common/utils/request'
@@ -21,19 +22,19 @@ export default class UserList extends Component {
     return (
       <>
         <Permission authority="roles:modify">
-          <a onClick={() => this.refs.editModal.show(record)}>修改</a>
+          <a onClick={() => this.editModal.show(record)}>修改</a>
         </Permission>
         <Permission authority="roles:delete">
           <a onClick={() => this.delete(record)}>删除</a>
         </Permission>
         <Permission authority="roles:permissions:list">
-          <a onClick={() => this.refs.choosePermissionsModal.show(record)}>权限设置</a>
+          <a onClick={() => this.choosePermissionsModal.show(record)}>权限设置</a>
         </Permission>
       </>
     );
   }
   delete = (record) => {
-    const tableList = this.refs.tableList;
+    const tableList = this.tableList;
     const selectRecrods = tableList.currentSelectRows(record);
     if (selectRecrods.length == 0) {
       message.error('请选择至少一条记录！');
@@ -59,16 +60,16 @@ export default class UserList extends Component {
   render() {
     return (
       <GridContent>
-        <TableList ref='tableList'>
+        <TableList ref={node => { this.tableList = node; }}>
           <Search>
             <Input label='角色名称' name='name' />
           </Search>
           <Action>
             <Permission authority="roles:add">
-              <Button type="primary" icon="plus" onClick={() => this.refs.addModal.show()}>添加</Button>
+              <Button type="primary" icon={<PlusOutlined />} onClick={() => this.addModal.show()}>添加</Button>
             </Permission>
             <Permission authority="roles:add">
-              <Button type="primary" icon="delete" onClick={() => this.delete()}>删除</Button>
+              <Button type="primary" icon={<DeleteOutlined />} onClick={() => this.delete()}>删除</Button>
             </Permission>
           </Action>
           <Table url='/sys/roles'>
@@ -77,13 +78,13 @@ export default class UserList extends Component {
             <Table.Action render={this.renderColAction}></Table.Action>
           </Table>
         </TableList >
-        <ModalInfo title='添加角色' ref="addModal" {...this.refs}>
+        <ModalInfo title='添加角色' ref={node => { this.addModal = node; }} tableList={() => this.tableList}>
           <RoleAdd />
         </ModalInfo>
-        <ModalInfo title='编辑角色' ref="editModal" {...this.refs}>
+        <ModalInfo title='编辑角色' ref={node => { this.editModal = node; }} tableList={() => this.tableList}>
           <RoleEdit />
         </ModalInfo>
-        <ModalInfo width="100%" title='选择权限' ref="choosePermissionsModal" {...this.refs}>
+        <ModalInfo width="100%" title='选择权限' ref={node => { this.choosePermissionsModal = node; }} tableList={() => this.tableList}>
           <RolePermissionList />
         </ModalInfo>
       </GridContent >

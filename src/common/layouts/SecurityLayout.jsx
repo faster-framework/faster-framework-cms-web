@@ -1,6 +1,5 @@
 import React from 'react';
-import { connect } from 'dva';
-import { Redirect } from 'umi';
+import { connect, Navigate, Outlet } from '@umijs/max';
 import { message } from 'antd';
 import { stringify } from 'querystring';
 import PageLoading from '@/common/components/PageLoading';
@@ -24,10 +23,10 @@ class SecurityLayout extends React.Component {
 
   render() {
     const { isReady } = this.state;
-    const { children, loading, currentUser } = this.props;
-    const isLogin = Object.keys(currentUser).length > 0;
+    const { loading, currentUser } = this.props;
+    const isLogin = Object.keys(currentUser || {}).length > 0;
     if (isLogin) {
-      return children;
+      return <Outlet />;
     }
     const queryString = stringify({
       redirect: window.location.href,
@@ -36,12 +35,12 @@ class SecurityLayout extends React.Component {
     if ((!isLogin && loading) || !isReady) {
       return <PageLoading />;
     }
-    message.error("登录状态过期，请重新登录");
-    return <Redirect to={`/login?${queryString}`}></Redirect>;
+    message.error('登录状态过期，请重新登录');
+    return <Navigate to={`/login?${queryString}`} replace />;
   }
 }
 
-export default connect(({ user, loading}) => ({
+export default connect(({ user, loading }) => ({
   currentUser: user.currentUser,
-  loading: loading.models.user
+  loading: loading.models.user,
 }))(SecurityLayout);

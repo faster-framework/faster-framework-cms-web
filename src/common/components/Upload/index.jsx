@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Icon, Upload, Button } from 'antd';
+import { Upload, Button } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 
 class UploadFile extends Component {
   state = {
@@ -51,13 +52,14 @@ class UploadFile extends Component {
     const { fileList } = this.state;
     const uploadButton = (
       <Button>
-        <Icon type="upload" />Upload
+        <UploadOutlined /> Upload
       </Button>
     );
     return (
       <div>
         <Upload
           action={BASE_API + '/upload'}
+          headers={{ 'Auth-Token': window.localStorage.token }}
           fileList={this.state.fileList}
           onChange={this.handleChange}
           data={(file)=>{

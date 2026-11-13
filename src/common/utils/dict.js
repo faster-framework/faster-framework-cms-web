@@ -1,43 +1,38 @@
-export function name(type, value) {
-  const store = window.g_app._store;
-  if (!store) {
-    return '';
-  }
+import { getStore } from './store';
 
-  const dictList = window.g_app._store.getState().dict.dictList;
-  const dict = dictList.find(item => {
-    return item.type == type && item.dictValue == value;
-  });
-  return dict ? dict.name : ''
+let dictList = [];
+
+export function setDictList(list) {
+  dictList = Array.isArray(list) ? list : [];
 }
 
-export function value(type, name) {
-  const store = window.g_app._store;
-  if (!store) {
-    return '';
+function getDictList() {
+  if (dictList.length > 0) {
+    return dictList;
   }
-  const dictList = window.g_app._store.getState().dict.dictList;
-  const dict = dictList.find(item => {
-    return item.type == type && item.name == name;
-  });
-  return dict ? dict.dictValue : ''
-}
-
-
-export function listByType(type) {
-  const store = window.g_app._store;
+  const store = getStore();
   if (!store) {
     return [];
   }
-  const dictList = window.g_app._store.getState().dict.dictList;
-  const dictFilter =  dictList.filter(item => {
-    return item.type == type;
-  });
-  return dictFilter ? dictFilter : []
+  return (store.getState().dict || {}).dictList || [];
+}
+
+export function name(type, value) {
+  const dict = getDictList().find(item => item.type == type && item.dictValue == value);
+  return dict ? dict.name : '';
+}
+
+export function value(type, name) {
+  const dict = getDictList().find(item => item.type == type && item.name == name);
+  return dict ? dict.dictValue : '';
+}
+
+export function listByType(type) {
+  return getDictList().filter(item => item.type == type);
 }
 
 export default {
   name: name,
   value: value,
-  listByType: listByType
+  listByType: listByType,
 };

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Input, Button, message, Modal } from 'antd';
-import { GridContent } from '@ant-design/pro-layout';
+import { RedoOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { GridContent } from '@ant-design/pro-components';
 import ModalInfo from '@/common/components/Modal';
 import TableList, { Search, Table, Action } from '@/common/components/TableList';
 import request from '@/common/utils/request'
@@ -32,22 +33,22 @@ export default class SectionList extends Component {
     return (
       <>
         <Permission authority="section:add">
-          <a onClick={() => this.refs.addModal.show(record)}>添加下级</a>
+          <a onClick={() => this.addModal.show(record)}>添加下级</a>
         </Permission>
         <Permission authority="section:modify">
-          <a onClick={() => this.refs.editModal.show(record)}>修改</a>
+          <a onClick={() => this.editModal.show(record)}>修改</a>
         </Permission>
         <Permission authority="article:modify">
-          <a onClick={() => this.refs.publishModal.show(record)}>发布</a>
+          <a onClick={() => this.publishModal.show(record)}>发布</a>
         </Permission>
         <Permission authority="article:modify">
-          <a onClick={() => this.refs.showModal.show(record)}>展示</a>
+          <a onClick={() => this.showModal.show(record)}>展示</a>
         </Permission>
         <Permission authority="article:modify">
-          <a onClick={() => this.refs.topModal.show(record)}>置顶</a>
+          <a onClick={() => this.topModal.show(record)}>置顶</a>
         </Permission>
         <Permission authority="section:modify">
-          <a onClick={() => this.refs.sortModal.show(record)}>顺序</a>
+          <a onClick={() => this.sortModal.show(record)}>顺序</a>
         </Permission>
         <Permission authority="section:delete">
           <a onClick={() => this.delete(record)}>删除</a>
@@ -65,7 +66,7 @@ export default class SectionList extends Component {
    * 删除
    */
   delete = (record) => {
-    const tableList = this.refs.tableList;
+    const tableList = this.tableList;
     const selectRecrods = tableList.currentSelectRows(record);
     if (selectRecrods.length == 0) {
       message.error('请选择至少一条记录！');
@@ -90,19 +91,19 @@ export default class SectionList extends Component {
   render() {
     return (
       <GridContent>
-        <TableList ref='tableList'>
+        <TableList ref={node => { this.tableList = node; }}>
           <Action>
             <Permission authority="section:list">
-              <Button type="primary" icon="redo" onClick={() => this.refs.tableList.reload()}>刷新</Button>
+              <Button type="primary" icon={<RedoOutlined />} onClick={() => this.tableList.reload()}>刷新</Button>
             </Permission>
             <Permission authority="section:add">
-              <Button type="primary" icon="plus" onClick={() => this.refs.addModal.show()}>添加</Button>
+              <Button type="primary" icon={<PlusOutlined />} onClick={() => this.addModal.show()}>添加</Button>
             </Permission>
             <Permission authority="section:delete">
-              <Button type="primary" icon="delete" onClick={() => this.delete()}>删除</Button>
+              <Button type="primary" icon={<DeleteOutlined />} onClick={() => this.delete()}>删除</Button>
             </Permission>
           </Action>
-          <Table url='/section/tree' pagination={false} defaultParam={this.defaultParam}>
+          <Table url='/section/tree' pagination={false} defaultParam={this.defaultParam} scroll={{ x: 1250 }}>
             <Table.Column width={250} ellipsis title="栏目名称" dataIndex="name" />
             <Table.Column width={150} title="编码" dataIndex="code" />
             <Table.Column width={100} title="模板类型" dataIndex="templateType" render={this.renderTemplateType} />
@@ -113,22 +114,22 @@ export default class SectionList extends Component {
             <Table.Action width={350}  render={this.renderColAction}></Table.Action>
           </Table>
         </TableList >
-        <ModalInfo title='添加栏目' ref="addModal" {...this.refs}>
+        <ModalInfo title='添加栏目' ref={node => { this.addModal = node; }} tableList={() => this.tableList}>
           <SectionAdd />
         </ModalInfo>
-        <ModalInfo title='编辑栏目' ref="editModal" {...this.refs}>
+        <ModalInfo title='编辑栏目' ref={node => { this.editModal = node; }} tableList={() => this.tableList}>
           <SectionEdit />
         </ModalInfo>
-        <ModalInfo title='设置顺序' ref="sortModal" {...this.refs}>
+        <ModalInfo title='设置顺序' ref={node => { this.sortModal = node; }} tableList={() => this.tableList}>
           <SectionSort />
         </ModalInfo>
-        <ModalInfo title='发布' ref="publishModal" {...this.refs}>
+        <ModalInfo title='发布' ref={node => { this.publishModal = node; }} tableList={() => this.tableList}>
           <SectionPublish />
         </ModalInfo>
-        <ModalInfo title='展示' ref="showModal" {...this.refs}>
+        <ModalInfo title='展示' ref={node => { this.showModal = node; }} tableList={() => this.tableList}>
           <SectionShow />
         </ModalInfo>
-        <ModalInfo title='置顶' ref="topModal" {...this.refs}>
+        <ModalInfo title='置顶' ref={node => { this.topModal = node; }} tableList={() => this.tableList}>
           <SectionTop />
         </ModalInfo>
       </GridContent >

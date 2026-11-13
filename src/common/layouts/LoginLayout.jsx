@@ -1,7 +1,6 @@
-import { DefaultFooter, getMenuData, getPageTitle } from '@ant-design/pro-layout';
-import DocumentTitle from 'react-document-title';
+import { DefaultFooter, getMenuData, getPageTitle } from '@ant-design/pro-components';
 import React from 'react';
-import { connect } from 'dva';
+import { connect, Outlet } from '@umijs/max';
 import styles from './LoginLayout.less';
 import { Spin } from 'antd';
 
@@ -12,22 +11,18 @@ const UserLayout = props => {
     },
   } = props;
   const { routes = [] } = route;
-  const {
-    children,
-    location = {
-      pathname: '',
-    },
-  } = props;
+  const { location = { pathname: '' } } = props;
   const { breadcrumb } = getMenuData(routes);
-  const {loading } = props;
+  const { loading } = props;
+  const pageTitle = getPageTitle({
+    pathname: location.pathname,
+    breadcrumb,
+    ...props,
+  });
+  React.useEffect(() => {
+    document.title = pageTitle;
+  }, [pageTitle]);
   return (
-    <DocumentTitle
-      title={getPageTitle({
-        pathname: location.pathname,
-        breadcrumb,
-        ...props,
-      })}
-    >
       <Spin size="large" spinning={loading}>
         <div className={styles.container}>
           <div className={styles.content}>
@@ -37,17 +32,15 @@ const UserLayout = props => {
               </div>
               <div className={styles.desc}>{TITLE_DESC}</div>
             </div>
-            {children}
+            <Outlet />
           </div>
           <DefaultFooter links={[]} copyright={COPRY_RIGHT} />
         </div>
       </Spin>
-    </DocumentTitle>
   );
 };
 
-export default connect(({ settings, global }) => (
-  {
+export default connect(({ settings, global }) => ({
   ...settings,
   loading: global.loading,
 }))(UserLayout);

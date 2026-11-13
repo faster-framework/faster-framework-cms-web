@@ -4,10 +4,16 @@ import request from '@/common/utils/request';
 import Action from './Action';
 import styles from './index.less';
 
+// antd 5 移除了 Table.Column 的渲染能力，保留同名标记组件，由 TablePro 转为 columns 配置。
+const Column = () => null;
+Column.displayName = 'TableColumn';
+const ColumnGroup = () => null;
+ColumnGroup.displayName = 'TableColumnGroup';
+
 
 export default class TablePro extends Component {
-  static Column = Table.Column;
-  static ColumnGroup = Table.ColumnGroup;
+  static Column = Column;
+  static ColumnGroup = ColumnGroup;
   static Action = Action;
   state = {
     selectedRowKeys: [],
@@ -166,19 +172,31 @@ export default class TablePro extends Component {
     });
   }
   render() {
-    const { children, ...otherPorps } = this.props;
-    let tableChildren = [], tableAction = [];
-    React.Children.forEach(this.props.children, item => {
-      if (item.type.displayName && item.type.displayName == 'ColumnAction') {
-        tableAction.push(React.cloneElement((<Table.Column title='操作' key='col-action' {...item.props}></Table.Column>), { className: styles.tableAction }));
-      } else {
-        tableChildren.push(item);
+    const { children, url, defaultParam, onRef, ...tableProps } = this.props;
+    const columns = [];
+    React.Children.forEach(children, item => {
+      if (!React.isValidElement(item) || !item.type) {
+        return;
       }
-    })
+      if (item.type === Column || item.type === ColumnGroup) {
+        columns.push({
+          ...item.props,
+          key: item.key || item.props.dataIndex || item.props.title,
+        });
+      } else if (item.type.displayName === 'ColumnAction') {
+        columns.push({
+          ...item.props,
+          title: '操作',
+          key: 'col-action',
+          className: [styles.tableAction, item.props.className].filter(Boolean).join(' '),
+        });
+      }
+    });
     return (
       <Table
         key={`table-${this.state.data && this.state.data.length}`}
         dataSource={this.state.data}
+        columns={columns}
         pagination={this.state.pagination}
         onChange={this.handleTableChange}
         bordered={true}
@@ -186,14 +204,11 @@ export default class TablePro extends Component {
           selectedRowKeys: this.state.selectedRowKeys,
           onSelect: this.onSelect,
           onSelectAll: this.onSelectAll,
-          onSelectInvert: this.onSelectInvert
+          onSelectInvert: this.onSelectInvert,
         }}
         rowKey="id"
-        {...otherPorps}
-      >
-        {tableChildren}
-        {tableAction}
-      </Table>
-    )
+        {...tableProps}
+      />
+    );
   }
 }

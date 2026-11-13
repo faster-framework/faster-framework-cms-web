@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Input, Button, message, Modal } from 'antd';
-import { GridContent } from '@ant-design/pro-layout';
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import { GridContent } from '@ant-design/pro-components';
 import ModalInfo from '@/common/components/Modal';
 import TableList, { Search, Table, Action } from '@/common/components/TableList';
 import request from '@/common/utils/request'
@@ -21,10 +22,10 @@ export default class DictList extends Component {
     return (
       <>
         <Permission authority="dict:modify">
-          <a onClick={() => this.refs.editModal.show(record)}>修改</a>
+          <a onClick={() => this.editModal.show(record)}>修改</a>
         </Permission>
         <Permission authority="dict:modify">
-          <a onClick={() => this.refs.sortModal.show(record)}>设置顺序</a>
+          <a onClick={() => this.sortModal.show(record)}>设置顺序</a>
         </Permission>
         <Permission authority="dict:delete">
           <a onClick={() => this.delete(record)}>删除</a>
@@ -33,7 +34,7 @@ export default class DictList extends Component {
     );
   }
   delete = (record) => {
-    const tableList = this.refs.tableList;
+    const tableList = this.tableList;
     const selectRecrods = tableList.currentSelectRows(record);
     if (selectRecrods.length == 0) {
       message.error('请选择至少一条记录！');
@@ -59,7 +60,7 @@ export default class DictList extends Component {
   render() {
     return (
       <GridContent>
-        <TableList ref='tableList'>
+        <TableList ref={node => { this.tableList = node; }}>
           <Search>
             <Input label='字典名称' name='name' />
             <Input label='字典类型' name='type' />
@@ -68,10 +69,10 @@ export default class DictList extends Component {
           </Search>
           <Action>
             <Permission authority="dict:add">
-              <Button type="primary" icon="plus" onClick={() => this.refs.addModal.show()}>添加</Button>
+              <Button type="primary" icon={<PlusOutlined />} onClick={() => this.addModal.show()}>添加</Button>
             </Permission>
             <Permission authority="dict:delete">
-              <Button type="primary" icon="delete" onClick={() => this.delete()}>删除</Button>
+              <Button type="primary" icon={<DeleteOutlined />} onClick={() => this.delete()}>删除</Button>
             </Permission>
           </Action>
           <Table url='/sys/dict' defaultParam={{ showStatus: 1 }}>
@@ -82,13 +83,13 @@ export default class DictList extends Component {
             <Table.Action render={this.renderColAction}></Table.Action>
           </Table>
         </TableList >
-        <ModalInfo title='添加字典' ref="addModal" {...this.refs}>
+        <ModalInfo title='添加字典' ref={node => { this.addModal = node; }} tableList={() => this.tableList}>
           <DictAdd />
         </ModalInfo>
-        <ModalInfo title='编辑字典' ref="editModal" {...this.refs}>
+        <ModalInfo title='编辑字典' ref={node => { this.editModal = node; }} tableList={() => this.tableList}>
           <DictEdit />
         </ModalInfo>
-        <ModalInfo title='设置顺序' ref="sortModal" {...this.refs}>
+        <ModalInfo title='设置顺序' ref={node => { this.sortModal = node; }} tableList={() => this.tableList}>
           <DictSort />
         </ModalInfo>
       </GridContent >

@@ -1,10 +1,14 @@
+import { getStore } from './store';
+
 export function getAuthority(str) {
-  const store = window.g_app._store;
+  const store = getStore();
   if (!store) {
     return null;
   }
   const authorityString =
-    typeof str === 'undefined' ? window.g_app._store.getState().user.currentUser.permissions : str;
+    typeof str === 'undefined'
+      ? (store.getState().user.currentUser || {}).permissions
+      : str;
 
   let authority;
 

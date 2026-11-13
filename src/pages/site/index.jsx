@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Input, Button, message, Modal } from 'antd';
-import { GridContent } from '@ant-design/pro-layout';
+import { GridContent } from '@ant-design/pro-components';
 import request from '@/common/utils/request'
 import styles from './index.less';
 import DictUtils from '@/common/utils/dict';
